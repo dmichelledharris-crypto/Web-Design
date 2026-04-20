@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ABC Fitness Studio — About Us</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* About Hero */
+      .about-hero {
+        background: linear-gradient(135deg, var(--navy) 0%, #112060 100%);
+        padding: 60px 40px;
+        text-align: center;
+      }
+      .about-hero h1 {
+        color: var(--white);
+        margin-bottom: 10px;
+      }
+      .about-hero p {
+        color: rgba(255, 255, 255, 0.65);
+      }
+
+      /* About intro */
+      .about-intro-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+      }
+      .about-intro-text h2 {
+        color: var(--navy);
+        margin-bottom: 12px;
+      }
+      .about-intro-text p {
+        color: #444;
+        margin-bottom: 14px;
+      }
+
+      .values-list {
+        margin-top: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .value-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 16px;
+        background: var(--off-white);
+        border-radius: 8px;
+        border-left: 4px solid var(--blue);
+      }
+      .value-item span {
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+      .value-item div strong {
+        display: block;
+        font-size: 0.95rem;
+        color: var(--navy);
+      }
+      .value-item div p {
+        font-size: 0.85rem;
+        color: var(--gray-dark);
+        margin: 0;
+      }
+
+      .about-intro-visual {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .about-img-tile {
+        border-radius: 10px;
+        overflow: hidden;
+        aspect-ratio: 3/2;
+      }
+      .about-img-tile img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.35s;
+      }
+      .about-img-tile:hover img {
+        transform: scale(1.05);
+      }
+      .about-img-tile.tall {
+        grid-row: span 2;
+        aspect-ratio: auto;
+      }
+
+      /* Business Hours */
+      .hours-section {
+        background: var(--off-white);
+      }
+      .hours-table-wrap {
+        overflow-x: auto;
+      }
+      .hours-table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+      .hours-table thead {
+        background: var(--navy);
+      }
+      .hours-table thead th {
+        color: var(--white);
+        font-family: 'Barlow Condensed', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 16px 24px;
+        text-align: left;
+      }
+      .hours-table tbody tr {
+        border-bottom: 1px solid #e8edf5;
+        background: var(--white);
+        transition: background var(--transition);
+      }
+      .hours-table tbody tr:hover {
+        background: #f0f4fb;
+      }
+      .hours-table tbody tr:last-child {
+        border-bottom: none;
+      }
+      .hours-table td {
+        padding: 16px 24px;
+        font-size: 0.95rem;
+        color: var(--font-dark);
+        text-align: center;
+      }
+      .hours-table td:first-child {
+        font-weight: 600;
+        color: var(--navy);
+        text-align: left;
+      }
+      .hours-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 700;
+      }
+      .hours-badge.open {
+        background: #d4f7e8;
+        color: #0a7040;
+      }
+      .hours-badge.closed {
+        background: #fde8e8;
+        color: #b91c1c;
+      }
+
+      /* Contact Form section */
+      .contact-section {
+        background: var(--white);
+      }
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.4fr;
+        gap: 60px;
+        align-items: start;
+      }
+      .contact-info h2 {
+        color: var(--navy);
+        margin-bottom: 12px;
+      }
+      .contact-info p {
+        color: #555;
+        margin-bottom: 24px;
+      }
+
+      .contact-detail {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      .contact-detail .ci-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--off-white);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+      .contact-detail div strong {
+        display: block;
+        font-size: 0.82rem;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--gray-dark);
+        margin-bottom: 2px;
+      }
+      .contact-detail div span {
+        font-size: 0.95rem;
+        color: var(--navy);
+        font-weight: 500;
+      }
+
+      .contact-form-card {
+        background: var(--white);
+        border: 1.5px solid #e2e8f4;
+        border-radius: 16px;
+        padding: 36px;
+        box-shadow: var(--shadow);
+      }
+      .contact-form-card h3 {
+        font-size: 1.5rem;
+        color: var(--navy);
+        margin-bottom: 24px;
+      }
+
+      @media (max-width: 900px) {
+        .about-intro-grid,
+        .contact-grid {
+          grid-template-columns: 1fr;
+          gap: 32px;
+        }
+        .about-intro-visual {
+          display: none;
+        }
+      }
+      @media (max-width: 560px) {
+        .about-hero {
+          padding: 50px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ── HEADER ── -->
+    <header>
+      <div class="header-inner">
+        <a href="index.html" class="logo-wrap">
+          <div class="logo-icon">🏋️</div>
+          <div class="logo-text">ABC Fitness<span>Studio</span></div>
+        </a>
+        <span class="page-title">About Us</span>
+        <nav class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="gallery.html">Gallery</a>
+          <a href="about.html" class="active">About Us</a>
+          <a href="schedule.html">Schedule</a>
+        </nav>
+        <button class="hamburger" id="hamburger" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+    <nav class="mobile-nav" id="mobileNav">
+      <a href="index.html">Home</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About Us</a>
+      <a href="schedule.html">Schedule</a>
+    </nav>
+
+    <!-- About Hero -->
+    <div class="about-hero">
+      <h1>About ABC Fitness Studio</h1>
+      <p>
+        Empowering our community through fitness, balance, and holistic
+        well-being since 2018.
+      </p>
+    </div>
+
+    <!-- ── ABOUT INTRO ── -->
+    <section class="section" style="background: var(--white)">
+      <div class="section-inner">
+        <div class="about-intro-grid">
+          <div class="about-intro-text">
+            <span class="section-label">Our Story</span>
+            <h2>More Than a Gym —<br />A Wellness Community</h2>
+            <div class="section-divider"></div>
+            <p>
+              ABC Fitness Studio was founded with a singular vision: to create a
+              local fitness haven that goes beyond the typical gym experience.
+              We specialize in a diverse range of classes — yoga, Pilates,
+              kickboxing, and Zumba — all designed to promote a healthy and
+              active lifestyle for every member of our community.
+            </p>
+            <p>
+              We believe that wellness is not one-size-fits-all. Our certified
+              instructors work with beginners and seasoned athletes alike,
+              offering personalized guidance in a welcoming, judgment-free
+              environment. Whether you're looking to de-stress through yoga or
+              unleash energy in a kickboxing session, there's a place for you at
+              ABC Fitness.
+            </p>
+            <p>
+              In addition to classes, we carry a curated selection of
+              high-quality fitness and training equipment to support your
+              journey both inside and outside the studio.
+            </p>
+
+            <div class="values-list">
+              <div class="value-item">
+                <span>⚖️</span>
+                <div>
+                  <strong>Balance</strong>
+                  <p>
+                    We blend cardio intensity with mindful movement so you can
+                    train hard and recover well.
+                  </p>
+                </div>
+              </div>
+              <div class="value-item">
+                <span>🌿</span>
+                <div>
+                  <strong>Harmony</strong>
+                  <p>
+                    Our classes and community foster mental clarity alongside
+                    physical strength.
+                  </p>
+                </div>
+              </div>
+              <div class="value-item">
+                <span>⚡</span>
+                <div>
+                  <strong>Active Living</strong>
+                  <p>
+                    We make movement a sustainable, joyful part of everyday life
+                    — not a chore.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="about-intro-visual">
+            <div class="about-img-tile tall">
+              <img
+                src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80"
+                alt="Group fitness class at ABC Fitness Studio"
+              />
+            </div>
+            <div class="about-img-tile">
+              <img
+                src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80"
+                alt="Individual yoga session"
+              />
+            </div>
+            <div class="about-img-tile">
+              <img
+                src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=600&q=80"
+                alt="Kickboxing training"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── BUSINESS HOURS ── -->
+    <section class="section hours-section">
+      <div class="section-inner">
+        <span class="section-label">When to Visit</span>
+        <h2 class="section-title">Business Hours</h2>
+        <div class="section-divider"></div>
+        <div class="hours-table-wrap">
+          <table
+            class="hours-table"
+            aria-label="ABC Fitness Studio business hours"
+          >
+            <thead>
+              <tr>
+                <th scope="col">Day</th>
+                <th scope="col">Opening Time</th>
+                <th scope="col">Closing Time</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Monday</td>
+                <td>6:00 AM</td>
+                <td>8:00 PM</td>
+                <td><span class="hours-badge open">Open</span></td>
+              </tr>
+              <tr>
+                <td>Tuesday</td>
+                <td>6:00 AM</td>
+                <td>8:00 PM</td>
+                <td><span class="hours-badge open">Open</span></td>
+              </tr>
+              <tr>
+                <td>Wednesday</td>
+                <td>6:00 AM</td>
+                <td>8:00 PM</td>
+                <td><span class="hours-badge open">Open</span></td>
+              </tr>
+              <tr>
+                <td>Thursday</td>
+                <td>6:00 AM</td>
+                <td>8:00 PM</td>
+                <td><span class="hours-badge open">Open</span></td>
+              </tr>
+              <tr>
+                <td>Friday</td>
+                <td>6:00 AM</td>
+                <td>8:00 PM</td>
+                <td><span class="hours-badge open">Open</span></td>
+              </tr>
+              <tr>
+                <td>Saturday</td>
+                <td>8:00 AM</td>
+                <td>6:00 PM</td>
+                <td><span class="hours-badge open">Open</span></td>
+              </tr>
+              <tr>
+                <td>Sunday</td>
+                <td>—</td>
+                <td>—</td>
+                <td><span class="hours-badge closed">Closed</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CONTACT US ── -->
+    <section class="section contact-section" id="contact">
+      <div class="section-inner">
+        <div class="contact-grid">
+          <div class="contact-info">
+            <span class="section-label">Get in Touch</span>
+            <h2>Contact Us</h2>
+            <div class="section-divider"></div>
+            <p>
+              Have a question about our classes, want to place a custom
+              equipment order, or just want to say hello? Fill out the form and
+              we'll be in touch promptly.
+            </p>
+
+            <div class="contact-detail">
+              <div class="ci-icon">📍</div>
+              <div>
+                <strong>Address</strong
+                ><span>123 Wellness Ave, Your Town, CA 94000</span>
+              </div>
+            </div>
+            <div class="contact-detail">
+              <div class="ci-icon">📞</div>
+              <div><strong>Phone</strong><span>(555) 123-4567</span></div>
+            </div>
+            <div class="contact-detail">
+              <div class="ci-icon">✉️</div>
+              <div>
+                <strong>Email</strong><span>hello@abcfitnessstudio.com</span>
+              </div>
+            </div>
+            <div class="contact-detail">
+              <div class="ci-icon">🕐</div>
+              <div>
+                <strong>Response Time</strong><span>Within 1 business day</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form-card">
+            <h3>Send Us a Message</h3>
+            <form id="contactForm" novalidate>
+              <div class="form-group">
+                <label for="contactName"
+                  >Name <span style="color: #c0392b">*</span></label
+                >
+                <input
+                  type="text"
+                  id="contactName"
+                  name="name"
+                  placeholder="Your full name"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="contactEmail"
+                  >Email Address <span style="color: #c0392b">*</span></label
+                >
+                <input
+                  type="email"
+                  id="contactEmail"
+                  name="email"
+                  placeholder="your@email.com"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="contactPhone"
+                  >Phone Number
+                  <span style="color: #888; font-weight: 400"
+                    >(Optional)</span
+                  ></label
+                >
+                <input
+                  type="tel"
+                  id="contactPhone"
+                  name="phone"
+                  placeholder="(555) 000-0000"
+                />
+              </div>
+              <div class="form-group">
+                <label for="contactFeedback"
+                  >Feedback / Order Information
+                  <span style="color: #c0392b">*</span></label
+                >
+                <textarea
+                  id="contactFeedback"
+                  name="feedback"
+                  placeholder="Tell us how we can help, or describe your custom order…"
+                  required
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label class="checkbox-row">
+                  <input type="checkbox" id="customOrder" name="customOrder" />
+                  <span>This is a custom order request</span>
+                </label>
+              </div>
+              <div class="form-actions">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  onclick="submitForm()"
+                >
+                  Submit Message
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-outline"
+                  onclick="clearForm()"
+                >
+                  Clear Form
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FOOTER ── -->
+    <footer>
+      <div class="footer-inner">
+        <div class="footer-top">
+          <div class="footer-brand">
+            <h3>ABC Fitness Studio</h3>
+            <p>
+              Your local wellness hub for yoga, Pilates, kickboxing, Zumba, and
+              premium fitness gear.
+            </p>
+          </div>
+          <div class="footer-subscribe">
+            <h4>Stay in the Loop</h4>
+            <div class="subscribe-row">
+              <input
+                type="email"
+                id="footerEmail"
+                placeholder="Your email address"
+              />
+              <button onclick="handleSubscribe()">Subscribe</button>
+            </div>
+          </div>
+          <div class="footer-social">
+            <h4>Follow Us</h4>
+            <div class="social-icons">
+              <a href="#" aria-label="Facebook">&#x1F426;</a>
+              <a href="#" aria-label="Instagram">📸</a>
+              <a href="#" aria-label="Twitter/X">🐦</a>
+              <a href="#" aria-label="YouTube">▶️</a>
+            </div>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <nav class="footer-nav">
+            <a href="index.html">Home</a>
+            <a href="gallery.html">Gallery</a>
+            <a href="about.html">About Us</a>
+            <a href="schedule.html">Schedule</a>
+          </nav>
+          <span class="footer-copy"
+            >© 2025 ABC Fitness Studio. All rights reserved.</span
+          >
+        </div>
+      </div>
+    </footer>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+      document
+        .getElementById('hamburger')
+        .addEventListener('click', function () {
+          document.getElementById('mobileNav').classList.toggle('open');
+        });
+
+      // ── Submit Form ──
+      function submitForm() {
+        const name = document.getElementById('contactName').value.trim();
+        const email = document.getElementById('contactEmail').value.trim();
+        const phone = document.getElementById('contactPhone').value.trim();
+        const feedback = document
+          .getElementById('contactFeedback')
+          .value.trim();
+        const custom = document.getElementById('customOrder').checked;
+
+        if (!name) {
+          showToast('Please enter your name.');
+          document.getElementById('contactName').focus();
+          return;
+        }
+        if (!email || !email.includes('@')) {
+          showToast('Please enter a valid email address.');
+          document.getElementById('contactEmail').focus();
+          return;
+        }
+        if (!feedback) {
+          showToast('Please enter your feedback or order information.');
+          document.getElementById('contactFeedback').focus();
+          return;
+        }
+
+        // Save to localStorage
+        const submission = {
+          name,
+          email,
+          phone,
+          feedback,
+          customOrder: custom,
+          timestamp: new Date().toISOString(),
+        };
+        localStorage.setItem(name, JSON.stringify(submission));
+
+        showToast('Thank you for your message, ' + name + '!');
+        clearForm();
+      }
+
+      // ── Clear Form ──
+      function clearForm() {
+        document.getElementById('contactName').value = '';
+        document.getElementById('contactEmail').value = '';
+        document.getElementById('contactPhone').value = '';
+        document.getElementById('contactFeedback').value = '';
+        document.getElementById('customOrder').checked = false;
+      }
+
+      // ── Subscribe ──
+      function handleSubscribe() {
+        const input = document.getElementById('footerEmail');
+        if (!input.value.trim() || !input.value.includes('@')) {
+          showToast('Please enter a valid email address.');
+          return;
+        }
+        showToast('Thank you for subscribing!');
+        input.value = '';
+      }
+
+      // ── Toast ──
+      function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 3500);
+      }
+    </script>
+  </body>
+</html>
