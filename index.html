@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ABC Fitness Studio — Home</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #0a2d5c 50%, var(--blue) 100%);
+      padding: 100px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -80px;
+      width: 520px; height: 520px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99,78,153,0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: -60px;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(21,94,188,0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 60px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero-content { flex: 1; }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(99,78,153,0.35);
+      border: 1px solid rgba(99,78,153,0.6);
+      color: #c3b8e8;
+      font-family: 'Comfortaa', cursive;
+      font-size: 0.78rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      color: var(--white);
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      margin-bottom: 20px;
+      line-height: 1.08;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: #7eb5f5;
+    }
+    .hero-sub {
+      color: rgba(255,255,255,0.75);
+      font-size: 1.05rem;
+      max-width: 480px;
+      margin-bottom: 36px;
+      line-height: 1.7;
+    }
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+    .stat { text-align: left; }
+    .stat strong {
+      display: block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--white);
+    }
+    .stat span {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.55);
+      font-family: 'Comfortaa', cursive;
+    }
+
+    .hero-visual {
+      flex: 0 0 380px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .hero-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      transition: background var(--transition), transform var(--transition);
+    }
+    .hero-card:hover { background: rgba(255,255,255,0.12); transform: translateY(-3px); }
+    .hero-card:nth-child(2) { margin-top: 28px; }
+    .hero-card:nth-child(4) { margin-top: -28px; }
+    .hero-card .icon { font-size: 2rem; margin-bottom: 8px; }
+    .hero-card p {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.75);
+      font-weight: 500;
+    }
+
+    /* ── PROMOS ── */
+    .promos-section { background: var(--off-white); }
+    .promos-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .promo-card {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .promo-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+    .promo-banner {
+      height: 8px;
+    }
+    .promo-banner.p1 { background: linear-gradient(90deg, var(--blue), var(--purple)); }
+    .promo-banner.p2 { background: linear-gradient(90deg, var(--purple), var(--vivid)); }
+    .promo-banner.p3 { background: linear-gradient(90deg, var(--vivid), var(--blue)); }
+    .promo-body { padding: 24px; }
+    .promo-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--purple);
+      margin-bottom: 8px;
+    }
+    .promo-body h3 { font-size: 1.2rem; color: var(--navy); margin-bottom: 8px; }
+    .promo-body p { font-size: 0.9rem; color: var(--gray-dark); margin-bottom: 16px; }
+    .promo-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      color: var(--white);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* ── CLASS IMAGES ── */
+    .images-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .img-card {
+      border-radius: 10px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      position: relative;
+      background: var(--navy);
+    }
+    .img-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+      opacity: 0.85;
+    }
+    .img-card:hover img { transform: scale(1.06); opacity: 1; }
+    .img-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,31,63,0.8));
+      color: var(--white);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 20px 14px 12px;
+    }
+
+    /* ── PERKS ── */
+    .perks-section { background: var(--blue); }
+    .perks-section .section-label { color: #a3c4f5; }
+    .perks-section .section-title { color: var(--white); }
+    .perks-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .perk-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 12px;
+      padding: 28px;
+      transition: background var(--transition);
+    }
+    .perk-card:hover { background: rgba(255,255,255,0.18); }
+    .perk-icon {
+      font-size: 2.2rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .perk-card h3 { color: var(--white); margin-bottom: 8px; font-size: 1.1rem; }
+    .perk-card p { color: rgba(255,255,255,0.72); font-size: 0.9rem; }
+
+    /* ── CATEGORIES ── */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .cat-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 20px;
+      border-radius: 10px;
+      border: 1.5px solid #e2e8f4;
+      background: var(--white);
+      transition: border-color var(--transition), background var(--transition), transform var(--transition);
+      cursor: default;
+    }
+    .cat-item:hover {
+      border-color: var(--blue);
+      background: var(--off-white);
+      transform: translateX(4px);
+    }
+    .cat-dot {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--off-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .cat-item strong {
+      display: block;
+      font-size: 0.95rem;
+      color: var(--navy);
+    }
+    .cat-item small {
+      font-size: 0.8rem;
+      color: var(--gray-dark);
+    }
+
+    @media (max-width: 960px) {
+      .hero-inner { flex-direction: column; }
+      .hero-visual { display: none; }
+      .promos-grid, .perks-grid, .images-grid { grid-template-columns: 1fr; }
+      .categories-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .hero { padding: 70px 20px; }
+      .hero-stats { gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo-wrap">
+      <div class="logo-icon">🏋️</div>
+      <div class="logo-text">
+        ABC Fitness
+        <span>Studio</span>
+      </div>
+    </a>
+    <span class="page-title">Home</span>
+    <nav class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About Us</a>
+      <a href="schedule.html">Schedule</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile Nav -->
+<nav class="mobile-nav" id="mobileNav">
+  <a href="index.html">Home</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="about.html">About Us</a>
+  <a href="schedule.html">Schedule</a>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <span class="hero-badge">Balance · Harmony · Active Living</span>
+      <h1>Train Stronger.<br><em>Live Better.</em></h1>
+      <p class="hero-sub">ABC Fitness Studio offers yoga, Pilates, kickboxing, Zumba, and premium fitness equipment — all in a welcoming space built for your well-being.</p>
+      <div class="hero-ctas">
+        <a href="gallery.html" class="btn btn-primary">Browse Classes &amp; Gear →</a>
+        <a href="about.html" class="btn btn-secondary">Learn About Us</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><strong>15+</strong><span>Classes Weekly</span></div>
+        <div class="stat"><strong>500+</strong><span>Members</span></div>
+        <div class="stat"><strong>7</strong><span>Expert Coaches</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card"><div class="icon">🧘</div><p>Yoga &amp; Pilates</p></div>
+      <div class="hero-card"><div class="icon">🥊</div><p>Kickboxing</p></div>
+      <div class="hero-card"><div class="icon">💃</div><p>Zumba</p></div>
+      <div class="hero-card"><div class="icon">🏋️</div><p>Equipment</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROMOS ── -->
+<section class="section promos-section">
+  <div class="section-inner">
+    <span class="section-label">Current Offers</span>
+    <h2 class="section-title">Promotions &amp; Deals</h2>
+    <div class="section-divider"></div>
+    <div class="promos-grid">
+      <div class="promo-card">
+        <div class="promo-banner p1"></div>
+        <div class="promo-body">
+          <div class="promo-tag">Limited Time</div>
+          <h3>Free Trial Class</h3>
+          <p>New to ABC Fitness? Join any class of your choice for free — no strings attached. Experience the studio before you commit.</p>
+          <span class="promo-badge">1st Class Free</span>
+        </div>
+      </div>
+      <div class="promo-card">
+        <div class="promo-banner p2"></div>
+        <div class="promo-body">
+          <div class="promo-tag">Member Referral</div>
+          <h3>Refer a Friend</h3>
+          <p>Bring a friend to ABC Fitness and both of you receive one month of classes at 50% off. Share the wellness journey!</p>
+          <span class="promo-badge">50% Off — Both Members</span>
+        </div>
+      </div>
+      <div class="promo-card">
+        <div class="promo-banner p3"></div>
+        <div class="promo-body">
+          <div class="promo-tag">New Launch</div>
+          <h3>Weekend Warrior Pack</h3>
+          <p>Saturdays just got better. Sign up for our new Saturday intensive sessions — yoga, Pilates &amp; Zumba back to back.</p>
+          <span class="promo-badge">Saturday Bundle — Save 20%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CLASS IMAGES ── -->
+<section class="section" style="background: var(--white);">
+  <div class="section-inner">
+    <span class="section-label">What We Offer</span>
+    <h2 class="section-title">Classes &amp; Sessions</h2>
+    <div class="section-divider"></div>
+    <div class="images-grid">
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=600&q=80" alt="Individual yoga session on a mat" />
+        <span class="img-label">Yoga Sessions</span>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600&q=80" alt="Group Pilates class in progress" />
+        <span class="img-label">Pilates Classes</span>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1549719386-74dfcbf7dbed?w=600&q=80" alt="Kickboxing training session" />
+        <span class="img-label">Kickboxing</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PERKS ── -->
+<section class="section perks-section">
+  <div class="section-inner">
+    <span class="section-label">Why ABC Fitness?</span>
+    <h2 class="section-title" style="color:white;">Why Train With Us</h2>
+    <div class="section-divider"></div>
+    <div class="perks-grid">
+      <div class="perk-card">
+        <span class="perk-icon">🏅</span>
+        <h3>Certified Instructors</h3>
+        <p>Every coach at ABC Fitness holds industry-recognized certifications and brings years of hands-on experience in their discipline.</p>
+      </div>
+      <div class="perk-card">
+        <span class="perk-icon">📅</span>
+        <h3>Flexible Scheduling</h3>
+        <p>Classes run Monday through Saturday with morning and evening slots so you can fit fitness into any lifestyle or work schedule.</p>
+      </div>
+      <div class="perk-card">
+        <span class="perk-icon">🛒</span>
+        <h3>Top-Quality Equipment</h3>
+        <p>Browse and purchase premium fitness gear — yoga mats, water bottles, resistance bands, and apparel — directly from our studio shop.</p>
+      </div>
+      <div class="perk-card">
+        <span class="perk-icon">🤝</span>
+        <h3>Welcoming Community</h3>
+        <p>We believe fitness is for everyone. Our inclusive, judgment-free environment supports members at every level of their journey.</p>
+      </div>
+      <div class="perk-card">
+        <span class="perk-icon">🧠</span>
+        <h3>Holistic Wellness</h3>
+        <p>We address both physical and mental health — from high-energy kickboxing to mindful yoga — because true wellness is whole-body.</p>
+      </div>
+      <div class="perk-card">
+        <span class="perk-icon">📦</span>
+        <h3>Custom Orders</h3>
+        <p>Need specialty equipment or a custom class package? Use our Contact Us form and we'll put together exactly what you need.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CATEGORIES ── -->
+<section class="section" style="background: var(--off-white);">
+  <div class="section-inner">
+    <span class="section-label">Browse</span>
+    <h2 class="section-title">Shop by Category</h2>
+    <div class="section-divider"></div>
+    <div class="categories-grid">
+      <div class="cat-item">
+        <div class="cat-dot">🧘</div>
+        <div><strong>Yoga</strong><small>Sessions, mats &amp; accessories</small></div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-dot">🤸</div>
+        <div><strong>Pilates</strong><small>Individual &amp; group classes</small></div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-dot">🥊</div>
+        <div><strong>Kickboxing</strong><small>High-energy combat fitness</small></div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-dot">💃</div>
+        <div><strong>Zumba</strong><small>Dance-based cardio workouts</small></div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-dot">🏋️</div>
+        <div><strong>Fitness Equipment</strong><small>Mats, bottles, apparel &amp; more</small></div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-dot">📦</div>
+        <div><strong>Class Bundles</strong><small>Save with multi-class packages</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h3>ABC Fitness Studio</h3>
+        <p>Your local wellness hub for yoga, Pilates, kickboxing, Zumba, and premium fitness gear.</p>
+      </div>
+      <div class="footer-subscribe">
+        <h4>Stay in the Loop</h4>
+        <div class="subscribe-row">
+          <input type="email" id="footerEmail" placeholder="Your email address" />
+          <button onclick="handleSubscribe()">Subscribe</button>
+        </div>
+      </div>
+      <div class="footer-social">
+        <h4>Follow Us</h4>
+        <div class="social-icons">
+          <a href="#" aria-label="Facebook">&#x1F426;</a>
+          <a href="#" aria-label="Instagram">📸</a>
+          <a href="#" aria-label="Twitter/X">🐦</a>
+          <a href="#" aria-label="YouTube">▶️</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <nav class="footer-nav">
+        <a href="index.html">Home</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="about.html">About Us</a>
+        <a href="schedule.html">Schedule</a>
+      </nav>
+      <span class="footer-copy">© 2025 ABC Fitness Studio. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // Hamburger
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  });
+
+  // Subscribe
+  function handleSubscribe() {
+    const input = document.getElementById('footerEmail');
+    if (!input.value.trim()) {
+      input.reportValidity ? input.setCustomValidity('Please enter your email.') : null;
+      input.focus();
+      showToast('Please enter your email address.');
+      return;
+    }
+    if (!input.value.includes('@')) {
+      showToast('Please enter a valid email address.');
+      return;
+    }
+    showToast('Thank you for subscribing!');
+    input.value = '';
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>
