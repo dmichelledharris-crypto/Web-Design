@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ABC Fitness Studio — Class Schedule</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+
+    /* ── HERO ── */
+    .schedule-hero {
+      background: linear-gradient(135deg, var(--navy) 0%, #112060 100%);
+      padding: 60px 40px;
+      text-align: center;
+    }
+    .schedule-hero h1 { color: var(--white); margin-bottom: 10px; }
+    .schedule-hero p  { color: rgba(255,255,255,0.65); font-size: 1rem; max-width: 540px; margin: 0 auto; }
+
+    /* ── DAY FILTER TABS ── */
+    .day-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .day-tab {
+      padding: 8px 20px;
+      border-radius: 24px;
+      border: 2px solid var(--blue);
+      background: transparent;
+      color: var(--blue);
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition);
+      letter-spacing: 0.5px;
+    }
+    .day-tab:hover,
+    .day-tab.active {
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    /* ── CLASS CARDS GRID ── */
+    .classes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .class-card {
+      background: var(--white);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform var(--transition), box-shadow var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+    .class-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    .class-card.hidden { display: none; }
+
+    .class-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      position: relative;
+    }
+    .class-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .class-card:hover .class-img img { transform: scale(1.06); }
+
+    .class-type-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--blue);
+      color: var(--white);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .class-type-badge.kickboxing { background: #b91c1c; }
+    .class-type-badge.pilates    { background: var(--purple); }
+    .class-type-badge.yoga       { background: #0a7040; }
+
+    .class-body {
+      padding: 18px 20px 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .class-body h3 {
+      font-size: 1.1rem;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .class-body p {
+      font-size: 0.85rem;
+      color: var(--gray-dark);
+      line-height: 1.55;
+      margin-bottom: 14px;
+      flex: 1;
+    }
+
+    .class-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .class-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      color: #555;
+    }
+    .class-meta-row .meta-icon {
+      width: 22px;
+      height: 22px;
+      background: var(--off-white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+    .class-meta-row strong { color: var(--navy); }
+
+    .spots-bar {
+      height: 5px;
+      background: #e8edf5;
+      border-radius: 3px;
+      margin-bottom: 14px;
+      overflow: hidden;
+    }
+    .spots-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--blue);
+      transition: width 0.4s ease;
+    }
+    .spots-fill.almost { background: #f59e0b; }
+    .spots-fill.full   { background: #c0392b; }
+
+    .spots-label {
+      font-size: 0.75rem;
+      color: var(--gray-dark);
+      margin-bottom: 12px;
+    }
+
+    .btn-book {
+      width: 100%;
+      padding: 10px;
+      background: var(--blue);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .btn-book:hover { background: var(--navy); }
+    .btn-book.full-btn {
+      background: #e8edf5;
+      color: var(--gray-dark);
+      cursor: not-allowed;
+    }
+
+    /* ── WEEKLY TIMETABLE ── */
+    .timetable-section { background: var(--off-white); }
+    .timetable-wrap { overflow-x: auto; }
+    .timetable {
+      width: 100%;
+      min-width: 700px;
+      border-collapse: collapse;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .timetable thead { background: var(--navy); }
+    .timetable thead th {
+      color: var(--white);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 14px 16px;
+      text-align: center;
+    }
+    .timetable thead th:first-child { text-align: left; }
+    .timetable tbody tr {
+      border-bottom: 1px solid #e8edf5;
+      background: var(--white);
+      transition: background var(--transition);
+    }
+    .timetable tbody tr:hover { background: #f0f4fb; }
+    .timetable tbody tr:last-child { border-bottom: none; }
+    .timetable td {
+      padding: 13px 16px;
+      font-size: 0.83rem;
+      color: var(--font-dark);
+      text-align: center;
+      vertical-align: middle;
+    }
+    .timetable td:first-child {
+      font-weight: 700;
+      color: var(--navy);
+      text-align: left;
+      font-size: 0.88rem;
+      white-space: nowrap;
+    }
+    .tt-class {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+    .tt-yoga       { background: #d4f7e8; color: #0a7040; }
+    .tt-pilates    { background: #ede9fb; color: #634E99; }
+    .tt-kickboxing { background: #fde8e8; color: #b91c1c; }
+    .tt-zumba      { background: #fef3c7; color: #b45309; }
+    .tt-closed     { color: var(--gray-dark); font-size: 0.75rem; }
+
+    /* ── INSTRUCTORS ── */
+    .instructors-section { background: var(--white); }
+    .instructors-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .instructor-card {
+      text-align: center;
+      padding: 28px 20px;
+      border-radius: 14px;
+      border: 1.5px solid #e2e8f4;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+    .instructor-card:hover { border-color: var(--blue); transform: translateY(-4px); }
+    .instructor-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 14px;
+    }
+    .instructor-card h3 { font-size: 1.05rem; color: var(--navy); margin-bottom: 4px; }
+    .instructor-card .subtitle { color: var(--purple); margin-bottom: 10px; display: block; }
+    .instructor-card p { font-size: 0.83rem; color: var(--gray-dark); }
+    .cert-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+    .cert-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: var(--off-white);
+      color: var(--blue);
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 960px) {
+      .classes-grid, .instructors-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .classes-grid, .instructors-grid { grid-template-columns: 1fr; }
+      .schedule-hero { padding: 50px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo-wrap">
+      <div class="logo-icon">🏋️</div>
+      <div class="logo-text">ABC Fitness<span>Studio</span></div>
+    </a>
+    <span class="page-title">Schedule</span>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="about.html">About Us</a>
+      <a href="schedule.html" class="active">Schedule</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+<nav class="mobile-nav" id="mobileNav">
+  <a href="index.html">Home</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="about.html">About Us</a>
+  <a href="schedule.html">Schedule</a>
+</nav>
+
+<!-- Hero -->
+<div class="schedule-hero">
+  <h1>Class Schedule</h1>
+  <p>Find a class that fits your goals and your day. All skill levels are welcome at ABC Fitness Studio.</p>
+</div>
+
+<!-- ── CLASS CARDS ── -->
+<section class="section" style="background: var(--white);">
+  <div class="section-inner">
+    <span class="section-label">This Week</span>
+    <h2 class="section-title">Upcoming Classes</h2>
+    <div class="section-divider"></div>
+
+    <!-- Day filter -->
+    <div class="day-tabs">
+      <button class="day-tab active" onclick="filterDay('all', this)">All Days</button>
+      <button class="day-tab" onclick="filterDay('mon', this)">Monday</button>
+      <button class="day-tab" onclick="filterDay('tue', this)">Tuesday</button>
+      <button class="day-tab" onclick="filterDay('wed', this)">Wednesday</button>
+      <button class="day-tab" onclick="filterDay('thu', this)">Thursday</button>
+      <button class="day-tab" onclick="filterDay('fri', this)">Friday</button>
+      <button class="day-tab" onclick="filterDay('sat', this)">Saturday</button>
+    </div>
+
+    <div class="classes-grid" id="classesGrid">
+
+      <!-- Card 1: Individual Yoga -->
+      <div class="class-card" data-day="mon wed fri">
+        <div class="class-img">
+          <img src="Client2_IndividualYoga.png" alt="Individual yoga session on a mat" />
+          <span class="class-type-badge yoga">Yoga</span>
+        </div>
+        <div class="class-body">
+          <h3>Individual Yoga</h3>
+          <p>A personalized one-on-one yoga session focused on your flexibility, breathing, and mindfulness goals.</p>
+          <div class="class-meta">
+            <div class="class-meta-row"><div class="meta-icon">📅</div><span><strong>Mon / Wed / Fri</strong></span></div>
+            <div class="class-meta-row"><div class="meta-icon">🕖</div><span><strong>6:30 AM</strong> · 60 min</span></div>
+            <div class="class-meta-row"><div class="meta-icon">👤</div><span>1-on-1 · All Levels</span></div>
+            <div class="class-meta-row"><div class="meta-icon">🏅</div><span>Instructor: <strong>Maya Chen</strong></span></div>
+          </div>
+          <div class="spots-bar"><div class="spots-fill" style="width:40%"></div></div>
+          <p class="spots-label">3 of 5 spots available</p>
+          <button class="btn-book" onclick="bookClass('Individual Yoga')">Book Class</button>
+        </div>
+      </div>
+
+      <!-- Card 2: Group Yoga -->
+      <div class="class-card" data-day="tue thu sat">
+        <div class="class-img">
+          <img src="Client2_GroupYoga.png" alt="Group yoga class with participants" />
+          <span class="class-type-badge yoga">Yoga</span>
+        </div>
+        <div class="class-body">
+          <h3>Group Yoga</h3>
+          <p>Join our energizing group yoga class and build strength and flexibility alongside fellow members.</p>
+          <div class="class-meta">
+            <div class="class-meta-row"><div class="meta-icon">📅</div><span><strong>Tue / Thu / Sat</strong></span></div>
+            <div class="class-meta-row"><div class="meta-icon">🕗</div><span><strong>7:00 AM</strong> · 60 min</span></div>
+            <div class="class-meta-row"><div class="meta-icon">👥</div><span>Up to 15 · All Levels</span></div>
+            <div class="class-meta-row"><div class="meta-icon">🏅</div><span>Instructor: <strong>Maya Chen</strong></span></div>
+          </div>
+          <div class="spots-bar"><div class="spots-fill almost" style="width:80%"></div></div>
+          <p class="spots-label">3 of 15 spots available</p>
+          <button class="btn-book" onclick="bookClass('Group Yoga')">Book Class</button>
+        </div>
+      </div>
+
+      <!-- Card 3: Individual Pilates -->
+      <div class="class-card" data-day="mon wed">
+        <div class="class-img">
+          <img src="Client2_IndividualPilates.png" alt="Individual Pilates session" />
+          <span class="class-type-badge pilates">Pilates</span>
+        </div>
+        <div class="class-body">
+          <h3>Individual Pilates</h3>
+          <p>A focused one-on-one Pilates session to build core strength, posture, and body alignment.</p>
+          <div class="class-meta">
+            <div class="class-meta-row"><div class="meta-icon">📅</div><span><strong>Mon / Wed</strong></span></div>
+            <div class="class-meta-row"><div class="meta-icon">🕙</div><span><strong>10:00 AM</strong> · 50 min</span></div>
+            <div class="class-meta-row"><div class="meta-icon">👤</div><span>1-on-1 · All Levels</span></div>
+            <div class="class-meta-row"><div class="meta-icon">🏅</div><span>Instructor: <strong>Jordan Lee</strong></span></div>
+          </div>
+          <div class="spots-bar"><div class="spots-fill" style="width:20%"></div></div>
+          <p class="spots-label">4 of 5 spots available</p>
+          <button class="btn-book" onclick="bookClass('Individual Pilates')">Book Class</button>
+        </div>
+      </div>
+
+      <!-- Card 4: Group Pilates -->
+      <div class="class-card" data-day="tue fri sat">
+        <div class="class-img">
+          <img src="Client2_GroupPilates.png" alt="Group Pilates class on mats" />
+          <span class="class-type-badge pilates">Pilates</span>
+        </div>
+        <div class="class-body">
+          <h3>Group Pilates</h3>
+          <p>Small-group Pilates that improves core strength, coordination, and body awareness in a fun setting.</p>
+          <div class="class-meta">
+            <div class="class-meta-row"><div class="meta-icon">📅</div><span><strong>Tue / Fri / Sat</strong></span></div>
+            <div class="class-meta-row"><div class="meta-icon">🕚</div><span><strong>11:00 AM</strong> · 55 min</span></div>
+            <div class="class-meta-row"><div class="meta-icon">👥</div><span>Up to 12 · Beginner–Inter.</span></div>
+            <div class="class-meta-row"><div class="meta-icon">🏅</div><span>Instructor: <strong>Jordan Lee</strong></span></div>
+          </div>
+          <div class="spots-bar"><div class="spots-fill" style="width:50%"></div></div>
+          <p class="spots-label">6 of 12 spots available</p>
+          <button class="btn-book" onclick="bookClass('Group Pilates')">Book Class</button>
+        </div>
+      </div>
+
+      <!-- Card 5: Individual Kickboxing -->
+      <div class="class-card" data-day="mon thu">
+        <div class="class-img">
+          <img src="Client2_IndividualKickboxing.png" alt="Individual kickboxing session" />
+          <span class="class-type-badge kickboxing">Kickboxing</span>
+        </div>
+        <div class="class-body">
+          <h3>Individual Kickboxing</h3>
+          <p>Intense one-on-one kickboxing training that sharpens technique, builds power, and torches calories.</p>
+          <div class="class-meta">
+            <div class="class-meta-row"><div class="meta-icon">📅</div><span><strong>Mon / Thu</strong></span></div>
+            <div class="class-meta-row"><div class="meta-icon">🕔</div><span><strong>5:00 PM</strong> · 45 min</span></div>
+            <div class="class-meta-row"><div class="meta-icon">👤</div><span>1-on-1 · Intermediate+</span></div>
+            <div class="class-meta-row"><div class="meta-icon">🏅</div><span>Instructor: <strong>Alex Rivera</strong></span></div>
+          </div>
+          <div class="spots-bar"><div class="spots-fill almost" style="width:75%"></div></div>
+          <p class="spots-label">1 of 4 spots available</p>
+          <button class="btn-book" onclick="bookClass('Individual Kickboxing')">Book Class</button>
+        </div>
+      </div>
+
+      <!-- Card 6: Group Kickboxing -->
+      <div class="class-card" data-day="wed fri sat">
+        <div class="class-img">
+          <img src="Client2_GroupKickboxing.png" alt="Group kickboxing class" />
+          <span class="class-type-badge kickboxing">Kickboxing</span>
+        </div>
+        <div class="class-body">
+          <h3>Group Kickboxing</h3>
+          <p>High-energy group kickboxing class combining cardio, strength training, and non-stop motivation.</p>
+          <div class="class-meta">
+            <div class="class-meta-row"><div class="meta-icon">📅</div><span><strong>Wed / Fri / Sat</strong></span></div>
+            <div class="class-meta-row"><div class="meta-icon">🕔</div><span><strong>6:00 PM</strong> · 50 min</span></div>
+            <div class="class-meta-row"><div class="meta-icon">👥</div><span>Up to 20 · All Levels</span></div>
+            <div class="class-meta-row"><div class="meta-icon">🏅</div><span>Instructor: <strong>Alex Rivera</strong></span></div>
+          </div>
+          <div class="spots-bar"><div class="spots-fill full" style="width:100%"></div></div>
+          <p class="spots-label">Class is full</p>
+          <button class="btn-book full-btn" disabled>Class Full</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── WEEKLY TIMETABLE ── -->
+<section class="section timetable-section">
+  <div class="section-inner">
+    <span class="section-label">At a Glance</span>
+    <h2 class="section-title">Weekly Timetable</h2>
+    <div class="section-divider"></div>
+    <div class="timetable-wrap">
+      <table class="timetable" aria-label="ABC Fitness Studio weekly class timetable">
+        <thead>
+          <tr>
+            <th scope="col">Time</th>
+            <th scope="col">Monday</th>
+            <th scope="col">Tuesday</th>
+            <th scope="col">Wednesday</th>
+            <th scope="col">Thursday</th>
+            <th scope="col">Friday</th>
+            <th scope="col">Saturday</th>
+            <th scope="col">Sunday</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>6:00 AM</td>
+            <td><span class="tt-class tt-yoga">Indiv. Yoga</span></td>
+            <td><span class="tt-class tt-yoga">Group Yoga</span></td>
+            <td><span class="tt-class tt-yoga">Indiv. Yoga</span></td>
+            <td><span class="tt-class tt-yoga">Group Yoga</span></td>
+            <td><span class="tt-class tt-yoga">Indiv. Yoga</span></td>
+            <td><span class="tt-class tt-yoga">Group Yoga</span></td>
+            <td class="tt-closed">Closed</td>
+          </tr>
+          <tr>
+            <td>10:00 AM</td>
+            <td><span class="tt-class tt-pilates">Indiv. Pilates</span></td>
+            <td><span class="tt-class tt-pilates">Group Pilates</span></td>
+            <td><span class="tt-class tt-pilates">Indiv. Pilates</span></td>
+            <td>—</td>
+            <td><span class="tt-class tt-pilates">Group Pilates</span></td>
+            <td><span class="tt-class tt-pilates">Group Pilates</span></td>
+            <td class="tt-closed">Closed</td>
+          </tr>
+          <tr>
+            <td>12:00 PM</td>
+            <td><span class="tt-class tt-zumba">Zumba</span></td>
+            <td>—</td>
+            <td><span class="tt-class tt-zumba">Zumba</span></td>
+            <td>—</td>
+            <td><span class="tt-class tt-zumba">Zumba</span></td>
+            <td><span class="tt-class tt-zumba">Zumba</span></td>
+            <td class="tt-closed">Closed</td>
+          </tr>
+          <tr>
+            <td>5:00 PM</td>
+            <td><span class="tt-class tt-kickboxing">Indiv. KB</span></td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="tt-class tt-kickboxing">Indiv. KB</span></td>
+            <td>—</td>
+            <td>—</td>
+            <td class="tt-closed">Closed</td>
+          </tr>
+          <tr>
+            <td>6:00 PM</td>
+            <td>—</td>
+            <td><span class="tt-class tt-yoga">Group Yoga</span></td>
+            <td><span class="tt-class tt-kickboxing">Group KB</span></td>
+            <td><span class="tt-class tt-pilates">Group Pilates</span></td>
+            <td><span class="tt-class tt-kickboxing">Group KB</span></td>
+            <td><span class="tt-class tt-kickboxing">Group KB</span></td>
+            <td class="tt-closed">Closed</td>
+          </tr>
+          <tr>
+            <td>7:00 PM</td>
+            <td><span class="tt-class tt-zumba">Zumba</span></td>
+            <td><span class="tt-class tt-kickboxing">Group KB</span></td>
+            <td><span class="tt-class tt-yoga">Group Yoga</span></td>
+            <td><span class="tt-class tt-zumba">Zumba</span></td>
+            <td><span class="tt-class tt-pilates">Indiv. Pilates</span></td>
+            <td>—</td>
+            <td class="tt-closed">Closed</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ── INSTRUCTORS ── -->
+<section class="section instructors-section">
+  <div class="section-inner">
+    <span class="section-label">Meet the Team</span>
+    <h2 class="section-title">Our Instructors</h2>
+    <div class="section-divider"></div>
+    <div class="instructors-grid">
+
+      <div class="instructor-card">
+        <div class="instructor-avatar">🧘</div>
+        <h3>Maya Chen</h3>
+        <span class="subtitle">Yoga Specialist</span>
+        <p>Maya brings 8 years of yoga practice and teaching experience, with a calming and encouraging presence that makes every student feel at ease.</p>
+        <div class="cert-tags">
+          <span class="cert-tag">RYT-500</span>
+          <span class="cert-tag">Mindfulness</span>
+          <span class="cert-tag">Yin Yoga</span>
+        </div>
+      </div>
+
+      <div class="instructor-card">
+        <div class="instructor-avatar">🤸</div>
+        <h3>Jordan Lee</h3>
+        <span class="subtitle">Pilates Expert</span>
+        <p>Jordan is a certified Pilates instructor with a background in physical therapy, specializing in rehabilitation and core strengthening for all fitness levels.</p>
+        <div class="cert-tags">
+          <span class="cert-tag">STOTT Pilates</span>
+          <span class="cert-tag">Rehab Specialist</span>
+        </div>
+      </div>
+
+      <div class="instructor-card">
+        <div class="instructor-avatar">🥊</div>
+        <h3>Alex Rivera</h3>
+        <span class="subtitle">Kickboxing Coach</span>
+        <p>Alex is a former competitive kickboxer with over a decade of coaching experience. His sessions are challenging, fun, and guaranteed to push you to your best.</p>
+        <div class="cert-tags">
+          <span class="cert-tag">NASM-CPT</span>
+          <span class="cert-tag">Combat Fitness</span>
+          <span class="cert-tag">Zumba</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <h3>ABC Fitness Studio</h3>
+        <p>Your local wellness hub for yoga, Pilates, kickboxing, Zumba, and premium fitness gear.</p>
+      </div>
+      <div class="footer-subscribe">
+        <h4>Stay in the Loop</h4>
+        <div class="subscribe-row">
+          <input type="email" id="footerEmail" placeholder="Your email address" />
+          <button onclick="handleSubscribe()">Subscribe</button>
+        </div>
+      </div>
+      <div class="footer-social">
+        <h4>Follow Us</h4>
+        <div class="social-icons">
+          <a href="#" aria-label="Facebook">&#x1F426;</a>
+          <a href="#" aria-label="Instagram">📸</a>
+          <a href="#" aria-label="Twitter/X">🐦</a>
+          <a href="#" aria-label="YouTube">▶️</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <nav class="footer-nav">
+        <a href="index.html">Home</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="about.html">About Us</a>
+        <a href="schedule.html">Schedule</a>
+      </nav>
+      <span class="footer-copy">© 2025 ABC Fitness Studio. All rights reserved.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  });
+
+  // ── Day filter ──
+  function filterDay(day, btn) {
+    // Update active tab
+    document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+
+    // Show/hide cards
+    document.querySelectorAll('.class-card').forEach(card => {
+      if (day === 'all') {
+        card.classList.remove('hidden');
+      } else {
+        const days = card.dataset.day || '';
+        card.classList.toggle('hidden', !days.includes(day));
+      }
+    });
+  }
+
+  // ── Book Class ──
+  function bookClass(className) {
+    showToast('Booking request sent for: ' + className + '. We\'ll confirm by email!');
+  }
+
+  // ── Subscribe ──
+  function handleSubscribe() {
+    const input = document.getElementById('footerEmail');
+    if (!input.value.trim() || !input.value.includes('@')) {
+      showToast('Please enter a valid email address.');
+      return;
+    }
+    showToast('Thank you for subscribing!');
+    input.value = '';
+  }
+
+  // ── Toast ──
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3500);
+  }
+</script>
+</body>
+</html>
